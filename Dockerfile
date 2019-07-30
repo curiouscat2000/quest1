@@ -5,5 +5,6 @@ COPY package*.json ./
 USER node
 RUN npm install
 COPY --chown=node:node . .
+RUN chmod -R 755 .
 EXPOSE 3000
 CMD [ "npm" ,"start" ]
