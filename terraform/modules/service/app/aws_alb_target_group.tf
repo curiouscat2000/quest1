@@ -19,6 +19,7 @@ resource "aws_alb_target_group" "ecs-target-group" {
     local.common_tags,
     map(
       "Name", "${var.aws_resource_base_name}_ExternalLBTargetGroup"
-    )
+    ),
+    "${var.tags}"
   )}"
 }

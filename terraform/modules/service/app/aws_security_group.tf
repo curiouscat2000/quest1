@@ -7,7 +7,8 @@ resource "aws_security_group" "appLB" {
     local.common_tags,
     map(
       "Name", "${var.aws_resource_base_name}_appLB"
-    )
+    ),
+    "${var.tags}"
   )}"
 }
 resource "aws_security_group_rule" "lb_allow_https_in" {

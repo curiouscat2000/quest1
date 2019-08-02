@@ -92,3 +92,8 @@ variable "service_docker_image" {
   description="full url of docker image to download and execute. If no tag supplied, latest will be picked up"
   type=string
 }
+variable "tags" {
+  type=map(string)
+  description="tag to be applied to resources created"
+}
+
