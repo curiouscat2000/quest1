@@ -1,10 +1,11 @@
-# ISTALL HOW TO
+# INSTALL HOW TO
 ## preconditions
  - an AWS account to play with.
  - docker installed on local computer
  - either AWS credentials file or environment variables exist per https://www.terraform.io/docs/providers/aws/index.html#authentication
  - credentials have Admin access to ECR/VPC/ECS/EC2/CodePipeline/CodeBuild/S3 in default region
- - AWS_DEFAULT_REGION env points to AWS region to play with
+ - AWS_DEFAULT_REGION env var points to AWS region to play with
+ - GITHUB_TOKEN env var points to GITHUB token for repo to checkout from
 
 ## installation 
 
@@ -17,20 +18,10 @@ export GITHUB_TOKEN=86311d28af920249cca8ec8229cefaab1c21c4c8
 #See https://www.terraform.io/docs/providers/aws/r/codepipeline.html
 
 # terraform bootstrap
-# pickup an unused and globally unqiue S3 bucket name, configure in:
-vim terraform/live/dev/vpc/main.tf
-vim terraform/live/dev/services/main.tf
-vim terraform/live/dev/services/data.tf
-vim terraform/bootstrap/main.tf
 
-cd terraform/bootstrap 
-terraform init && terraform apply
+cd terraform/live/dev/services
+terraform init && terraform apply -auto-approve
 
-# create VPC and ECS service
-cd terraform/dev/vpc
-terraform init && terraform apply
-cd terraform/dev/services
-terraform init && terraform apply
 ```
 
 # Test
@@ -46,8 +37,7 @@ terraform init && terraform apply
 - dedicated VPC 
 - public and private networks, in multi AZs just for extensiblity/best pracices demo
 ## terraform state
-- S3 backend. For the sake of demo, pls configure globally unique S3 bucket name
-- several smaller terraform state files should be more manageable than one big
+- local file, for the sake of demo convenience
 ## terraform files layout
 - modules //reusable infrastructure as code, no state, no AWS account/region specifics
 - versioning - by git tags or by explicit module folder(s) rename
@@ -67,8 +57,8 @@ terraform init && terraform apply
 
 
 ## notes
-- bad:chicken and egg for backend bootstrap. Want keep vital S3 bucket under control. Prob to have wrapping BAT/SHELL script for bootstrapping
-- bad: backend config prohibits interpolation - have dups across code
+-  ~~bad:chicken and egg for backend bootstrap. Want keep vital S3 bucket under control. Prob to have wrapping BAT/SHELL script for bootstrapping~~
+-  ~~bad: backend config prohibits interpolation - have dups across code~~
 - bad:terraform keeps secrets in plaintext in state files, have to protect those
 - if have to create  service role forl ECS from terraform, set create_ecs_service_linked_role to true in terraform/modules/services/variables.tf
 - terraforms stack pickups code from GitHub repo https://github.com/curiouscat2000/quest1 
